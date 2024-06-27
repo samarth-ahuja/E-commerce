@@ -1,0 +1,12 @@
+.product-card{
+    padding:2px;
+    width:31%;
+    border:solid black 2px;
+    margin:3px;
+}
+.product-card img{
+    width:50%;
+    margin:auto;
+    object-fit: contain;
+
+}
