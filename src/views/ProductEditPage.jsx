@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { useDispatch,useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { fetchProductData } from "../redux/actions/ProductActions";
 import { useEffect, useState } from "react";
 import { FormControl, TextField, Box, Button } from '@mui/material';
@@ -8,56 +8,56 @@ import Loading from "../components/Loading";
 import { updateProductData } from "../redux/actions/ProductActions";
 
 export default function ProductEditPage() {
-    const [productInputState,setProductInputState] = useState({
-        id:'',
-        title:'',
-        price:'',
-        description:'',
-        category:'',
-        image:'',
-    }); 
+    const [productInputState, setProductInputState] = useState({
+        id: '',
+        title: '',
+        price: '',
+        description: '',
+        category: '',
+        image: '',
+    });
     const { id } = useParams();
-    const ctx = useSelector(state=>state.ProductOperations);
+    const ctx = useSelector(state => state.ProductOperations);
     const dispatch = useDispatch();
-    function submitHandler(event) {
+    function updateProduct(event) {
         event.preventDefault();
-        dispatch(updateProductData({...productInputState}));
+        dispatch(updateProductData({ ...productInputState }));
     }
-    useEffect(()=>{
+    useEffect(() => {
         setProductInputState(ctx.edittingProductItem);
-    },[ctx.edittingProductItem])
+    }, [ctx.edittingProductItem])
     useEffect(() => {
         dispatch(fetchProductData(id))
     }, [dispatch])
-    function handleChange(event){
-        setProductInputState((prev)=>({
+    function updateProductInputField(event) {
+        setProductInputState((prev) => ({
             ...prev,
-            [event.target.name]:event.target.value
+            [event.target.name]: event.target.value
         }))
     }
 
     return (
         <Box>
             <h2>Product Details</h2>
-            {ctx.loadingEdittingProductItem && <Loading/>}
-            <form className='ProductUpdateForm' onSubmit={submitHandler}>
+            {ctx.loadingEdittingProductItem && <Loading />}
+            <form className='ProductUpdateForm' onSubmit={updateProduct}>
                 <FormControl sx={{ margin: 2 }}>
-                    <TextField label="Id" name="id" value={productInputState?.id || 'ID'} onChange={handleChange}/>
+                    <TextField label="Id" name="id" value={productInputState?.id || 'ID'} onChange={updateProductInputField} />
                 </FormControl>
                 <FormControl sx={{ margin: 2 }}>
-                    <TextField label="Title" name="title" value={productInputState?.title || 'title'} onChange={handleChange}/>
+                    <TextField label="Title" name="title" value={productInputState?.title || 'title'} onChange={updateProductInputField} />
                 </FormControl>
                 <FormControl sx={{ margin: 2 }}>
-                    <TextField label="Price" name="price" value={productInputState?.price || 'price'} onChange={handleChange}/>
+                    <TextField label="Price" name="price" value={productInputState?.price || 'price'} onChange={updateProductInputField} />
                 </FormControl>
                 <FormControl sx={{ margin: 2 }}>
-                    <TextField label="Description" name="description" value={productInputState?.description || 'description'} onChange={handleChange}/>
+                    <TextField label="Description" name="description" value={productInputState?.description || 'description'} onChange={updateProductInputField} />
                 </FormControl>
                 <FormControl sx={{ margin: 2 }}>
-                    <TextField label="Category" name="category" value={productInputState?.category || 'category'} onChange={handleChange}/>
+                    <TextField label="Category" name="category" value={productInputState?.category || 'category'} onChange={updateProductInputField} />
                 </FormControl>
                 <FormControl sx={{ margin: 2 }}>
-                    <TextField label="Image URL" name="image" value={productInputState?.image || 'image'} onChange={handleChange}/>
+                    <TextField label="Image URL" name="image" value={productInputState?.image || 'image'} onChange={updateProductInputField} />
                 </FormControl>
                 <Button type="submit">Submit</Button>
             </form>
