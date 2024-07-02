@@ -1,0 +1,4 @@
+.NewProductForm{
+    display: flex;
+    flex-direction: column;
+}

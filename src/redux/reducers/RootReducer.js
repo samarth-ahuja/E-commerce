@@ -1,7 +1,7 @@
 import { combineReducers } from "redux";
-import { DataRequestReducer } from "./DataRequestReducer";
+import { ProductReducer } from "./ProductReducer";
 
 
 export const RootReducer = combineReducers({
-    DataRequest:DataRequestReducer,
+    ProductOperations:ProductReducer,
 })

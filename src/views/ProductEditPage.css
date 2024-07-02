@@ -1,0 +1,4 @@
+.ProductUpdateForm{
+    display: flex;
+    flex-direction: column;
+}

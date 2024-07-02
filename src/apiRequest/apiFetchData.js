@@ -1,6 +1,9 @@
-import { getData } from "./api.js";
+import { apiCall } from "./api.js";
 
-export async function apiFetchData(){
-    const data = await getData("products");
+export async function apiFetchData(item=""){
+    if(item){
+        return await apiCall(`products/+${item}`);    
+    }
+    const data = await apiCall("products");
     return data;
 }
