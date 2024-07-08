@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams,useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProductData } from "../redux/actions/ProductActions";
 import { useEffect, useState } from "react";
@@ -16,12 +16,14 @@ export default function ProductEditPage() {
         category: '',
         image: '',
     });
+    const navigate = useNavigate();
     const { id } = useParams();
     const ctx = useSelector(state => state.ProductOperations);
     const dispatch = useDispatch();
     function updateProduct(event) {
         event.preventDefault();
         dispatch(updateProductData({ ...productInputState }));
+        navigate('/products')
     }
     useEffect(() => {
         setProductInputState(ctx.edittingProductItem);
@@ -42,7 +44,7 @@ export default function ProductEditPage() {
             {ctx.loadingEdittingProductItem && <Loading />}
             <form className='ProductUpdateForm' onSubmit={updateProduct}>
                 <FormControl sx={{ margin: 2 }}>
-                    <TextField label="Id" name="id" value={productInputState?.id || 'ID'} onChange={updateProductInputField} />
+                    <TextField label="Id" name="id" value={productInputState?.id || 'ID'} onChange={updateProductInputField} disabled />
                 </FormControl>
                 <FormControl sx={{ margin: 2 }}>
                     <TextField label="Title" name="title" value={productInputState?.title || 'title'} onChange={updateProductInputField} />

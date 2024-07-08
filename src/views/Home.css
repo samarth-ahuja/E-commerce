@@ -1,7 +1,14 @@
 .app{
     display:flex;
-    margin-top:10px;
+    margin-top:50px;
 }
 h1{
     text-align:center;
+}
+.searchbar-form{
+    display: flex;
+    justify-content: space-between;
+}
+.home-page-header-buttons button{
+    margin: 2px;
 }

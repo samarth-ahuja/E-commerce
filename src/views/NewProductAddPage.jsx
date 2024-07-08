@@ -7,7 +7,7 @@ import { addProduct } from '../redux/actions/ProductActions';
 export default function NewProductAddPage() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    function addProduct(event){
+    function submitProduct(event){
         event.preventDefault();
         const fd = new FormData(event.target);
         let newProductData = {};
@@ -20,7 +20,7 @@ export default function NewProductAddPage() {
     return (
         <Box>
             <h2>New Product Item</h2>
-            <form className='NewProductForm' onSubmit={addProduct}>
+            <form className='NewProductForm' onSubmit={submitProduct}>
                 <FormControl sx={{margin:2}}>
                     <TextField label="Id" name="id"/>
                 </FormControl>

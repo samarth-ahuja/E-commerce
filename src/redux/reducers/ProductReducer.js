@@ -1,4 +1,4 @@
-import { FETCH_PRODUCTLIST_START,FETCH_PRODUCTLIST_SUCCESS,FETCH_PRODUCTLIST_FAILURE,FETCH_PRODUCTLIST_END,FETCH_PRODUCT_ITEM_START,FETCH_PRODUCT_ITEM_SUCCESS,FETCH_PRODUCT_ITEM_FAILURE,FETCH_PRODUCT_ITEM_END,ADD_PRODUCT_ITEM,UPDATE_PRODUCT_ITEM } from '../constants/ProductConstants';
+import { FETCH_PRODUCTLIST_START,FETCH_PRODUCTLIST_SUCCESS,FETCH_PRODUCTLIST_FAILURE,FETCH_PRODUCTLIST_END,FETCH_PRODUCT_ITEM_START,FETCH_PRODUCT_ITEM_SUCCESS,FETCH_PRODUCT_ITEM_FAILURE,FETCH_PRODUCT_ITEM_END,ADD_PRODUCT_ITEM,UPDATE_PRODUCT_ITEM, DELETE_PRODUCT_ITEM } from '../constants/ProductConstants';
 
 const initialState = {
     productList:null,
@@ -63,7 +63,20 @@ export const ProductReducer = (state=initialState,action)=>{
         case UPDATE_PRODUCT_ITEM:
             return {
                 ...state,
-                edittingProductItem:action.payload
+                edittingProductItem:action.payload,
+                productList:state.productList.map((item)=>{
+                    if(item.id==action.payload.id){
+                        return action.payload;
+                    }
+                    else{
+                        return item;
+                    }
+                })
+            }
+        case DELETE_PRODUCT_ITEM:
+            return{
+                ...state,
+                productList:state.productList.filter((item)=>item.id!=action.payload)
             }
         default:
             return state;
