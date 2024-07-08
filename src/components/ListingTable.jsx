@@ -7,8 +7,7 @@ import { useState } from "react";
 import { deleteProduct } from "../redux/actions/ProductActions";
 import ProductDetailDialog from "./ProductDetailDialog";
 
-export default function ListingTable({productSearchList}) {
-    console.log(productSearchList)
+export default function ListingTable({productSearchList,setProductSearchList}) {
     const navigate = useNavigate();
     const [selectedProduct,setSelectedProduct] = useState(null);
     const open = (selectedProduct!=null);
@@ -22,6 +21,7 @@ export default function ListingTable({productSearchList}) {
     }
     function deleteProductItem(id){
         dispatch(deleteProduct(id));
+        setProductSearchList(prev=>prev.filter(item=>item.id!=id))
     }
     const listingItems = productSearchList?.length>0?productSearchList:productList;
     return (

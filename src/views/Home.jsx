@@ -105,7 +105,7 @@ export default function Home() {
             <Snackbar autoHideDuration={5000} open={noItemFoundState} onClose={noItemFoundCloseHandler}>No Item Found</Snackbar>
             <div className='app'>
                 {ctx.loadingProductList && <Loading />}
-                {ctx.productList && <ListingTable productSearchList={productSearchList} />}
+                {ctx.productList && <ListingTable productSearchList={productSearchList} setProductSearchList={setProductSearchList}/>}
                 {/* {error&&<Error/>} */}
             </div>
         </>
