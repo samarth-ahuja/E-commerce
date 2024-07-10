@@ -1,6 +1,9 @@
-import { FETCH_PRODUCTLIST_START,FETCH_PRODUCTLIST_SUCCESS,FETCH_PRODUCTLIST_FAILURE,FETCH_PRODUCTLIST_END,FETCH_PRODUCT_ITEM_START,FETCH_PRODUCT_ITEM_SUCCESS,FETCH_PRODUCT_ITEM_FAILURE,FETCH_PRODUCT_ITEM_END,ADD_PRODUCT_ITEM,UPDATE_PRODUCT_ITEM, DELETE_PRODUCT_ITEM } from '../constants/ProductConstants';
+import { FETCH_PRODUCTLIST_START, FETCH_PRODUCTLIST_SUCCESS, FETCH_PRODUCTLIST_FAILURE, FETCH_PRODUCTLIST_END, FETCH_PRODUCT_ITEM_START, FETCH_PRODUCT_ITEM_SUCCESS, FETCH_PRODUCT_ITEM_FAILURE, FETCH_PRODUCT_ITEM_END, ADD_PRODUCT_ITEM, UPDATE_PRODUCT_ITEM, DELETE_PRODUCT_ITEM, FETCH_CATEGORY_LIST_START, FETCH_CATEGORY_LIST_END, FETCH_CATEGORY_LIST_SUCCESS, FETCH_CATEGORY_LIST_FAILURE } from '../constants/ProductConstants';
 
 const initialState = {
+    loadingCategoryList:false,
+    categoryList:null,
+    errorCategoryList:false,
     productList:null,
     loadingProductList:false,
     errorProductList:null,
@@ -77,6 +80,26 @@ export const ProductReducer = (state=initialState,action)=>{
             return{
                 ...state,
                 productList:state.productList.filter((item)=>item.id!=action.payload)
+            }
+        case FETCH_CATEGORY_LIST_START:
+            return {
+                ...state,
+                loadingCategoryList:true
+            }
+        case FETCH_CATEGORY_LIST_END:
+            return {
+                ...state,
+                loadingCategoryList:false
+            }
+        case FETCH_CATEGORY_LIST_SUCCESS:
+            return {
+                ...state,
+                categoryList:action.payload
+            }
+        case FETCH_CATEGORY_LIST_FAILURE:
+            return {
+                ...state,
+                errorCategoryList:action.payload
             }
         default:
             return state;

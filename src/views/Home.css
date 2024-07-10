@@ -12,3 +12,15 @@ h1{
 .home-page-header-buttons button{
     margin: 2px;
 }
+.filterForm{
+    display: flex;
+    flex-wrap: wrap;
+    padding-bottom: 5%;
+    align-items: center;
+    justify-content: center;
+}
+.filter-input-field{
+    vertical-align: middle!important;
+    margin: 2% !important;
+    width: 40%!important;
+}

@@ -2,14 +2,15 @@ import './Home.css';
 import ListingTable from '../components/ListingTable';
 import Loading from '../components/Loading';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchProductList } from '../redux/actions/ProductActions';
+import { fetchProductList, fetchCategoryList } from '../redux/actions/ProductActions';
 import { useEffect, useState, useRef } from 'react';
 import Button from '@mui/material/Button';
 import { Search, FilterAlt } from '@mui/icons-material';
-import { TextField, InputAdornment, ToggleButton, Box } from '@mui/material';
+import { TextField, InputAdornment, ToggleButton, Box, Dialog, InputLabel, Select, MenuItem, FormControl, Typography } from '@mui/material';
 import { Unstable_Popup as BasePopup } from '@mui/base/Unstable_Popup';
 import { useNavigate } from 'react-router-dom';
 import { Snackbar } from '@mui/base/Snackbar';
+import FilterModal from '../components/FilterModal';
 
 let firstTime = true;
 
@@ -20,7 +21,7 @@ export default function Home() {
         setProductSearchList(ctx?.productList);
     }
     const [isSelectedFilter, setIsSelectedFilter] = useState(false);
-    const [rangeValues, setRangeValues] = useState({ minPrice: '', maxPrice: '' })
+    const [modalFilterValues, setmodalFilterValues] = useState({ minPrice: '', maxPrice: '', category: '', minRating: '' })
     const popRef = useRef();
     const [noItemFoundState, setNoItemFoundState] = useState(false);
     const dispatch = useDispatch();
@@ -28,11 +29,24 @@ export default function Home() {
     useEffect(() => {
         if (firstTime) {
             dispatch(fetchProductList());
+            dispatch(fetchCategoryList());
             firstTime = false;
         }
     }, [dispatch])
-    function priceRangeChanger(event) {
-        setRangeValues(prev => ({ ...prev, [event.target.name]: event.target.value }));
+    function applyFilter(event){
+        event.preventDefault();
+        console.log(event.target);
+        const fd = new FormData(event.target);
+        let newFilterObject = {};
+        for(const[key,value] of fd){
+            newFilterObject = {
+                ...newFilterObject,[key]:value
+            }
+        }
+        setmodalFilterValues(()=>{
+            setIsSelectedFilter(false);
+            return newFilterObject;
+        });
     }
     function noItemFoundCloseHandler() {
         setNoItemFoundState(false);
@@ -48,25 +62,28 @@ export default function Home() {
                     takenIntoList = takenIntoList | item[key].toString().includes(valueFilter);
                 }
                 return takenIntoList;
-            })
-            .filter((item)=>{
+            }).filter((item) => {
                 let priceFilter = true;
-                if(!rangeValues.maxPrice && !rangeValues.minPrice){
+                if (!modalFilterValues.maxPrice && !modalFilterValues.minPrice) {
                     return true;
                 }
-                if(rangeValues.maxPrice){
-                    priceFilter &= item.price<rangeValues.maxPrice;
+                if (modalFilterValues.maxPrice) {
+                    priceFilter &= item.price < modalFilterValues.maxPrice;
                 }
-                if(rangeValues.minPrice){
-                    priceFilter &= item.price>=rangeValues.minPrice;
+                if (modalFilterValues.minPrice) {
+                    priceFilter &= item.price >= modalFilterValues.minPrice;
                 }
                 return priceFilter;
-            })
-            if (!searchedList?.length) {
-                setNoItemFoundState(true);
-            }
+            }).filter((item) => item.rating.rate >= modalFilterValues.minRating)
+                .filter((item) => item.category == modalFilterValues.category)
+            // if (!searchedList?.length) {
+            //     setNoItemFoundState(true);
+            // }
             return searchedList;
         })
+    }
+    function filterCloseHandler() {
+        setIsSelectedFilter(false);
     }
     return (
         <>
@@ -89,14 +106,7 @@ export default function Home() {
                         >
                             <FilterAlt />
                         </ToggleButton>
-                        <BasePopup open={isSelectedFilter} anchor={popRef.current}>
-                            <Box sx={{ marginTop: "6px" }}>
-                                <form>
-                                    <TextField placeholder="Minimum Price" size="small" name="minPrice" value={rangeValues.minPrice} onChange={priceRangeChanger}></TextField>
-                                    <TextField placeholder="Maximum Price" size="small" name="maxPrice" value={rangeValues.maxPrice} onChange={priceRangeChanger}></TextField>
-                                </form>
-                            </Box>
-                        </BasePopup>
+                        <FilterModal isSelectedFilter={isSelectedFilter} modalFilterValues={modalFilterValues} applyFilter={applyFilter} filterCloseHandler={filterCloseHandler}></FilterModal>
                         <Button variant="contained" type="submit">Search</Button>
                         <Button type="button" variant="contained" onClick={() => navigate("/product/new")}>Add Product</Button>
                     </div>
@@ -105,7 +115,7 @@ export default function Home() {
             <Snackbar autoHideDuration={5000} open={noItemFoundState} onClose={noItemFoundCloseHandler}>No Item Found</Snackbar>
             <div className='app'>
                 {ctx.loadingProductList && <Loading />}
-                {ctx.productList && <ListingTable productSearchList={productSearchList} setProductSearchList={setProductSearchList}/>}
+                {ctx.productList && <ListingTable productSearchList={productSearchList} setProductSearchList={setProductSearchList} />}
                 {/* {error&&<Error/>} */}
             </div>
         </>

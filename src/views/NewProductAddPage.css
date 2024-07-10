@@ -1,4 +1,8 @@
 .NewProductForm{
     display: flex;
-    flex-direction: column;
+    margin:3%;
+    flex-wrap: wrap;
+}
+.input-add-product{
+    width:30%;
 }
